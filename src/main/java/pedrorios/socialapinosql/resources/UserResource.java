@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pedrorios.socialapinosql.Services.UserService;
+import pedrorios.socialapinosql.domain.Post;
 import pedrorios.socialapinosql.domain.User;
 import pedrorios.socialapinosql.dto.UserDto;
 
@@ -26,7 +27,7 @@ public class UserResource {
         return ResponseEntity.ok().body(listDto);
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable String id){
 
         User obj = service.findById(id);
@@ -43,7 +44,7 @@ public class UserResource {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update (@RequestBody UserDto objDto, @PathVariable String id){
 
         User obj = service.fromDTO(objDto);
@@ -54,11 +55,17 @@ public class UserResource {
 
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id){
 
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id){
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj.getPosts());
     }
 
 }
