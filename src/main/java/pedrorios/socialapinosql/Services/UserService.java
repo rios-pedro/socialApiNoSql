@@ -2,10 +2,12 @@ package pedrorios.socialapinosql.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pedrorios.socialapinosql.Services.exception.ObjectNotFoundException;
 import pedrorios.socialapinosql.domain.User;
 import pedrorios.socialapinosql.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,5 +18,10 @@ public class UserService {
 
     public List<User> findAll(){
     return repo.findAll();
+    }
+
+    public User findById(String id){
+        Optional<User> obj = repo.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found."));
     }
 }
