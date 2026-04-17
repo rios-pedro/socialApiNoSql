@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pedrorios.socialapinosql.Services.UserService;
 import pedrorios.socialapinosql.domain.User;
+import pedrorios.socialapinosql.dto.UserDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -18,8 +20,9 @@ public class UserResource {
     private UserService service;
 
     @GetMapping
-    public ResponseEntity<List<User>> fidAll(){
+    public ResponseEntity<List<UserDTO>> fidAll(){
         List<User> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(listDto);
     }
 }
